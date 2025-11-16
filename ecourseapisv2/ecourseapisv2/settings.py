@@ -41,9 +41,21 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'rest_framework',
-    'courses.apps.CoursesConfig'
+    'courses.apps.CoursesConfig',
+    'drf_yasg',
+    'cloudinary',
+    'cloudinary_storage'
 ]
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+cloudinary.config(
+  	cloud_name = "dt3btnnxy",
+  	api_key = "463966291979622",
+  	api_secret = "qh9cOXw9UUo-BKRyFl6OTY-FYis"
+)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -81,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'coursedb',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'anhthu',
         'HOST': ''  # mặc định localhost
     }
 }

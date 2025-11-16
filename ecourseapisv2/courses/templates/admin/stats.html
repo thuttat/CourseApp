@@ -6,39 +6,43 @@
     <li><strong>{{ s.name }}</strong>{{ s.count }}</li>
     {% endfor %}
 </ul>
-<div style="width:500">
+
+<div style="width:50%">
   <canvas id="myChart"></canvas>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     window.onload = function(){
-    list data =[]
-    list labels =[]
-    {% for s in stats %}
-    data.push({{ s.count }})
-    labels.push('{{ s.name }}')
-    {% endfor %}
-      const ctx = document.getElementById('myChart');
+        let data = [];
+        let label = [];
 
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: '# thong ke theo khoa hoc',
-            data: data,
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
+        // Django template
+        {% for s in stats %}
+        data.push({{ s.count }})
+        label.push("{{ s.name }}")
+        {% endfor %}
+
+        const ctx = document.getElementById('myChart');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: '# THONG KE KHOA HOC',
+                    data: data,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
-          }
-        }
-  });
+        });
     }
-
 </script>
 {% endblock %}

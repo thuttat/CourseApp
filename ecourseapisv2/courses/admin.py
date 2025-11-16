@@ -40,7 +40,7 @@ class MyAdminSite(admin.AdminSite):
 
     def get_urls(self):
         return [path('course-stats/',self.stats_view)] + super().get_urls()
-#<QuerySet [(1, 'Software Engineering', 4), (2, 'Artificial Intelligence', 1), (3, 'Data Sciences', 1)]>
+        #<QuerySet [(1, 'Software Engineering', 4), (2, 'Artificial Intelligence', 1), (3, 'Data Sciences', 1)]>
 
     def stats_view(self,request):
         stats= Category.objects.annotate(count=Count('course')).values('id','name','count')

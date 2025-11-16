@@ -1,6 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from cloudinary.models import CloudinaryField
 
 
 # Create your models here.
@@ -25,7 +26,7 @@ class BaseModel(models.Model):
 class Course(BaseModel):
     subject = models.CharField(max_length=255)
     description = models.TextField(null=True)
-    image = models.ImageField(upload_to='courses/%Y/%m',null=True)
+    image = CloudinaryField()#models.ImageField(upload_to='courses/%Y/%m',null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
