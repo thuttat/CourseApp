@@ -44,8 +44,12 @@ INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
     'drf_yasg',
     'cloudinary',
-    'cloudinary_storage'
+    'cloudinary_storage',
+    'oauth2_provider'
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('oauth2_provider.contrib.rest_framework.OAuth2Authentication',)
+}
 
 import cloudinary
 import cloudinary.uploader
@@ -93,7 +97,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'coursedb',
         'USER': 'root',
-        'PASSWORD': 'anhthu',
+        'PASSWORD': 'root',
         'HOST': ''  # mặc định localhost
     }
 }
@@ -142,3 +146,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CLIENT_ID ='kUjDz4OV33TamIHlDwiddnsFBtalKHXC0rJ4p4kn'
+CLIENT_SECRET='PApqciZo33LlOB0gkuIhcI8a567V49dIw6KHGMx0n1cuUA9e5NxXGZAW9XSMTt2GotpKMQuHADMIis3Q6LMW4W4RdmcKiXNksczk8e4JIVjXUwoz94SbuDlBnXyATeMx'
