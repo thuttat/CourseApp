@@ -2,8 +2,8 @@ from rest_framework import viewsets,generics,status, parsers, permissions
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 
-from courses import serializers,paginators
-from courses.models import Category, Course, Lesson, User
+from courses import serializers,paginators,perms
+from courses.models import Category, Course, Lesson, User,Comment
 
 class CategoryView(viewsets.ViewSet, generics.ListAPIView):
     queryset = Category.objects.all()
@@ -25,7 +25,7 @@ class CourseView(viewsets.ViewSet, generics.ListAPIView):
             query = query.filter(category_id=cate_id)
 
         return query
-    @action(methods=['get'], url_path='lesson',detail=True)
+    @action(methods=['get'], url_path='lessons',detail=True)
     def get_lesson(self,request,pk):
         lesson=self.get_object().lesson_set.filter(active=True)
 
@@ -34,11 +34,26 @@ class CourseView(viewsets.ViewSet, generics.ListAPIView):
         return Response(serializers.LessonSerializer(lesson,many=True).data,status=status.HTTP_200_OK)
 
 class LessonView(viewsets.ViewSet,generics.RetrieveAPIView):
-    queryset = Lesson.objects.prefetch_related('tag').filter(active=True)
+    queryset = Lesson.objects.prefetch_related('tags').filter(active=True)
     serializer_class = serializers.LessonDetailSerializer
 
-    @action(methods=['get'],url_path='comment',detail=True)
+    def get_permissions(self):
+        if self.action.__eq__('get_comments') and self.request.method.__eq__('POST'):
+            return [permissions.IsAuthenticated()]
+        return [permissions.AllowAny]
+
+    @action(methods=['get','post'],url_path='comments',detail=True)
     def get_comment(self,request,pk):
+        if request.method.__eq__ == 'POST':
+            s= serializers.CommentSerializer(data={
+                'user':request.user.pk,
+                'lesson':pk,
+                'content':request.data.get('content'),
+            })
+            s.is_valid()
+            c=s.save()
+
+            return Response(serializers.CommentSerializer(c).data,status=status.HTTP_201_CREATED)
         comments=self.get_object().comment_set.select_related('user').filter(active = True)
         return Response(serializers.CommentSerializer(comments,many=True).data,status=status.HTTP_200_OK)
 
@@ -51,9 +66,17 @@ class UserView(viewsets.ViewSet,generics.CreateAPIView):
     def get_current_user(self,request):
         user = request.user
         if request.method.__eq__('PATCH'):
-            for k,v in request.data.items():
-                if k in ['first_name','last_name','email']:
-                    setattr(user,k,v)
-            user.save()
+            s= serializers.UserSerializer(user,data=request.data,partial=True)#truyền dữ liệu cho đối tượng gốc(user)
+            s.is_valid(raise_exception=True)
+            s.save()
+            # for k,v in request.data.items():
+            #     if k in ['first_name','last_name','email']:
+            #         setattr(user,k,v)
+            # user.save()
         return Response(serializers.UserSerializer(request.user).data,status=status.HTTP_200_OK)
+
+class CommentView(viewsets.ViewSet,generics.DestroyAPIView):
+    queryset = Comment.objects.filter(active=True)
+    serializer_class = serializers.CommentSerializer
+    permission_classes = [perms.CommentOwner]
 
