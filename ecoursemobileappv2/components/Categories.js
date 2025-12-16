@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Apis, { endpoints } from "../utils/Apis";
 import { Chip } from "react-native-paper";
-import { Text, View } from "react-native";
+import { Text, Touchable, TouchableOpacity, View } from "react-native";
 import MyStyles from "../styles/MyStyles";
 
-const Categories =() =>{
+const Categories =(setCateId) =>{
     const [categories,setCategories]= useState([]);
     const loadCates = async () =>{
         let res = await Apis.get(endpoints['categories']);
@@ -16,7 +16,15 @@ const Categories =() =>{
     },[])
     return (
         <View style={MyStyles.row}>
-            {categories.map(c => <Chip key={c.id} icon='label'>{c.name}</Chip>)}  
+            <TouchableOpacity onPress={()=> setCateId(null)}>
+                <Chip style={MyStyles} icon='label'>All</Chip>
+
+            </TouchableOpacity>
+            {categories.map(c => <TouchableOpacity key={c.id} onPress={()=> setCateId(c.id)}>
+                <Chip style={MyStyles} icon='label'>{c.name}</Chip>
+
+            </TouchableOpacity>
+            )}  
         </View>
     );
 }
