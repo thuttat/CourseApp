@@ -6,7 +6,7 @@ const Home =() =>{
     return (
         <>
             <Categories setCateId={setCateId}/>
-            <Courses cateId/>
+            <Courses cateId={cateId}/>
             
         </>
     )

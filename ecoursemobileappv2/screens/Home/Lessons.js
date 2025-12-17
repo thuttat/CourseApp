@@ -2,12 +2,11 @@ import { useEffect, useState } from "react"
 
 import { ActivityIndicator, List } from "react-native-paper";
 
-import MyStyles from "../styles/MyStyles";
-import * as React from 'react';
-import { Searchbar } from 'react-native-paper';
+
 import { useRoute } from "@react-navigation/native";
 import Apis, { endpoints } from "../../utils/Apis";
 import { FlatList, View } from "react-native";
+import MyStyles from "../../styles/MyStyles";
 
 const Lessons =() =>{
     const[lessons,setLessons]=useState([]);

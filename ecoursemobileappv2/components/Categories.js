@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Apis, { endpoints } from "../utils/Apis";
 import { Chip } from "react-native-paper";
-import { Text, Touchable, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import MyStyles from "../styles/MyStyles";
 
-const Categories =(setCateId) =>{
+const Categories =({setCateId}) =>{
     const [categories,setCategories]= useState([]);
     const loadCates = async () =>{
         let res = await Apis.get(endpoints['categories']);

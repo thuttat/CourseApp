@@ -2,13 +2,14 @@ import { useEffect, useState } from "react"
 import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator, List } from "react-native-paper";
 import Apis, { endpoints } from "../utils/Apis";
-import MyStyles from "../styles/MyStyles";
+
 import { Searchbar } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
+import MyStyles from "../styles/MyStyles";
 
-const Courses =(cateId) =>{
+const Courses =({cateId}) =>{
     const[courses,setCourses]=useState([]);
-    const[loading,setLoading] = useState(true);
+    const[loading,setLoading] = useState(false);
     const[q,setQ]=useState();
     const[page,setPage] = useState(1);
     const nav = useNavigation();
@@ -31,9 +32,9 @@ const Courses =(cateId) =>{
             if (page === 1)
                 setCourses(res.data.results);
             else if(page >1)
-                setCourses([...courses,...res.data.results])
+                setCourses([...courses,...res.data.results]);
             if (res.data.next ==  null)
-                setPage=0;
+                setPage(0);
         } catch(ex){
             console.error(ex);
         }finally{
@@ -48,6 +49,7 @@ const Courses =(cateId) =>{
         },500);
         return () => clearTimeout(timer);
     },[q,cateId,page])
+
     useEffect(()=>{
         setPage(1);
     },[q,cateId])

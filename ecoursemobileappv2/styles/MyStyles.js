@@ -20,5 +20,10 @@ export default StyleSheet.create({
   },
   padding: {
     padding:8
+  },
+  title:{
+    fontSize: 30,
+    color: "blue",
+    alignSelf:"center"
   }
 });
